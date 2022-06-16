@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const logger = require('morgan')
+const router = require('./routes/banking.route')
 require('dotenv').config()
 
 
@@ -14,8 +15,9 @@ var corsOptions = {
 app.use(cors(corsOptions))
 app.use(bodyParser.json())
 app.use(logger('dev'))
+app.use('/api',router)
 
-app.get('/', () => {
+app.get('/', (req,res) => {
     res.json({
         message: "Welcome to the Bank"
     })
