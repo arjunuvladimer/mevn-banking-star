@@ -9,7 +9,7 @@ require('dotenv').config()
 const app = express()
 
 var corsOptions = {
-    origin:"http://localhost:8081"
+    origin:"http://localhost:8080"
 }
 
 app.use(cors(corsOptions))
@@ -17,13 +17,15 @@ app.use(bodyParser.json())
 app.use(logger('dev'))
 app.use('/api',router)
 
+app.set('secretKey','dsafhjdsasaldkjfaskdjsalfdj')
+
 app.get('/', (req,res) => {
     res.json({
         message: "Welcome to the Bank"
     })
 })
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8081
 
 app.listen(PORT, () => {
     console.log(`Server is up and running on ${PORT}`)

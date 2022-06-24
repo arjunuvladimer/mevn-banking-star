@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 
 const BankingCustomerModel = db.banking
 
+
+
 // Create
 exports.create = (req,res,next) =>{
     let {name,mobile,address,email,password} = req.body
@@ -118,3 +120,34 @@ exports.deleteAll = (req,res,next) =>{
         })
     })
 }
+
+exports.login = (req, res, next) => {
+    BankingCustomerModel.findOne({email: req.body.email},
+      (err, result) => {
+          if(err){
+              next(err);
+          }
+          else{
+              // bcrypt to compare the password(mongodb in hasheway) 
+              // with the password sending from req.body
+              if(bcrypt.compare(req.body.password, result.password, )){
+                  // Generating the security token
+                  // Sign Function
+                  // Parameters
+                  // 1. Id
+                  // 2. secret key
+                  // 3. how much time that security token needs to valid
+                  const token = jwt.sign({id:result.id},req.app.get('secretKey'), {expiresIn:'1h'})
+                  // Sending the response from the server to the user
+                  res.status(200).json({
+                      status: "Success",
+                      message: "User Logged in Successfully",
+                      data: {
+                          user: result,
+                          token: token
+                      }
+                  })
+              }
+          }
+    });
+  };
